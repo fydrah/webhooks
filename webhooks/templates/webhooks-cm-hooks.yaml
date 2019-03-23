@@ -1,4 +1,3 @@
-{{- if or .Values.rawHooks .Values.extraHooks }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -9,6 +8,13 @@ metadata:
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
 data:
-  hooks.json: |
-    {{ include "..hooks-config" . | nindent 4 }}
+  hook-healthz.json: |
+    [{
+      "id": "healthz",
+      "execute-command": "/scripts/raw/healthz",
+      "response-message": "OK"
+    }]
+{{- if .Values.hooksConfig }}
+  hooks-config.json: |
+    {{ .Values.hooksConfig | nindent 4 }}
 {{- end }}

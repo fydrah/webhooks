@@ -1,13 +1,17 @@
-{{- if .Values.extraHooks }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "..fullname" . }}-extra
+  name: {{ include "..fullname" . }}-scripts-raw
   labels:
     app.kubernetes.io/name: {{ include "..name" . }}
     helm.sh/chart: {{ include "..chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
 data:
-{{ toYaml .Values.extraHooks | nindent 2 }}
+  healthz: |
+    #!/bin/sh
+    # This is a health check
+    exit 0
+{{- if .Values.rawHooks }}
+{{ toYaml .Values.rawHooks | nindent 2 }}
 {{- end }}

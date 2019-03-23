@@ -23,17 +23,31 @@ spec:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command:
+            - "/webhook"
+            - "-urlprefix"
+            - ""
+            - "-hotreload"
+            - "-verbose"
+            - "-port"
+            - "8080"
+            - "-hooks"
+            - "/config/hook-healthz.json"
+            {{- if .Values.hooksConfig }}
+            - "-hooks"
+            - "/config/hooks-config.json"
+            {{- end }}
           ports:
             - name: http
               containerPort: 8080
               protocol: TCP
           livenessProbe:
             httpGet:
-              path: /hooks/healthz
+              path: /healthz
               port: http
           readinessProbe:
             httpGet:
-              path: /hooks/healthz
+              path: /healthz
               port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
@@ -42,8 +56,8 @@ spec:
               mountPath: /config
               readOnly: true
           {{- if .Values.rawHooks }}
-            - name: raw-hooks
-              mountPath: /scripts
+            - name: scripts-raw
+              mountPath: /scripts/raw
           {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
@@ -63,8 +77,8 @@ spec:
             name: {{ include "..name" . }}-hooks
 
       {{- if .Values.rawHooks }}
-        - name: raw-hooks
+        - name: scripts-raw
           configMap:
-            name: {{ include "..name" . }}-raw
+            name: {{ include "..name" . }}-scripts-raw
             defaultMode: 0555
       {{- end }}

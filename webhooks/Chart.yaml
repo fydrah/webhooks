@@ -1,4 +1,4 @@
 apiVersion: v1
 description: Deploy your own webhooks
 name: webhooks
-version: 1.0.0
+version: 1.0.1

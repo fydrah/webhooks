@@ -48,24 +48,28 @@ tolerations: []
 
 affinity: {}
 
-# Dict of raw webhooks scripts.
+# JSON configuration.
+#
+# See https://github.com/adnanh/webhook/blob/master/docs/Hook-Examples.md
+# hooksConfig: |
+#   [
+#     {
+#       "id": "myotherhook"
+#       "execute-command": "/scripts/raw/myotherhook"
+#     }
+#   ]
+
+
+
+# Dict of raw hooks scripts.
 #
 # key is webhook name, value is script content
 # Only shell and python3 scripts are supported.
-rawWebhooks: {}
-  # myfirstwebhook: |
+rawHooks: {}
+  # myfirsthook: |
   #   #!/bin/bash
   #   echo "Hello World!"
-  # myotherwebhook: |
+  # myotherhook: |
   #   #!/usr/bin/env python
   #   print("Hello World!")
   #
-
-# Dict of extra webhooks
-#
-# Useful if you rebuild webhooks image,
-# and add your own binaries of scripts.
-#
-# key is webhook name, value is executable path.
-extraWebhooks: {}
-  # myownexecutable: "/helloworld"

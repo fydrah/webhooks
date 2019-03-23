@@ -9,37 +9,35 @@ this, you will have to rebuild the
 
 ## Configuration
 
-* Raw hook configuration:
+* hooks configuration:
 
 ```yaml
-# Dict of raw webhooks scripts.
+# JSON configuration.
+#
+# See https://github.com/adnanh/webhook/blob/master/docs/Hook-Examples.md
+# hooksConfig: |
+#   [
+#     {
+#       "id": "myotherhook"
+#       "execute-command": "/scripts/raw/myotherhook"
+#     }
+#   ]
+```
+
+* hooks scripts setups. Scripts will be available in `/scripts/raw/` directory:
+
+```yaml
+# Dict of raw hooks scripts.
 #
 # key is webhook name, value is script content
 # Only shell and python3 scripts are supported.
-rawWebhooks:
-  myfirstwebhook: |
-    #!/bin/bash
-    echo "Hello World!"
-  myotherwebhook: |
-    #!/usr/bin/env python
-    print("Hello World!")
-```
-
-
-* Extra hooks configuration (needs docker image rebuild):
-
-```yaml
-image:
-  repository: your/image
-  tag: v1.0.0
-# Dict of extra webhooks
-#
-# Useful if you rebuild webhooks image,
-# and add your own binaries of scripts.
-#
-# key is webhook name, value is executable path.
-extraWebhooks:
-  myownexecutable: "/helloworld"
+rawHooks: {}
+  # myfirsthook: |
+  #   #!/bin/bash
+  #   echo "Hello World!"
+  # myotherhook: |
+  #   #!/usr/bin/env python
+  #   print("Hello World!")
 ```
 
 ## Install
